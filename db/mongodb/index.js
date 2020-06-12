@@ -24,6 +24,30 @@ const moviesSchema = new mongoose.Schema({
   rating: Number,
 });
 
-const Movies = mongoose.model('Movies', moviesSchema);
+let Movies = mongoose.model('Movies', moviesSchema);
+
+// SEED DATABASE WITH EXAMPLE DATA ONLY ONCE
+const seedDB = () => {
+  let alreadyExecuted = false;
+  if (alreadyExecuted) {
+    return;
+  }
+
+  let seed = new Movies({
+    movieID: 343611,
+    name: 'Jack Reacher: Never Go Back',
+    genres: [53, 28, 80, 18, 9648],
+    rating: 4.19,
+  });
+  seed.save((err, seed) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log(`${seed.name} saved to database!`);
+    alreadyExecuted = true;
+  });
+};
+
+seedDB();
 
 module.exports.db = db;
