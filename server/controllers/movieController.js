@@ -1,5 +1,6 @@
 const movieModel = require('../models/movieModel.js');
 const apiHelpers = require('../helpers/apiHelpers.js');
+const { db } = require('../../db/mongodb');
 
 //Return requests to the client
 module.exports = {
@@ -14,11 +15,22 @@ module.exports = {
   getGenres: (req, res) => {
     apiHelpers
       .getOfficialGenres()
-      .then((apiRes) => {
-        res.status(200).json(apiRes.data.genres); // --> [{id: 00, name: 'genreName'}, {}, ...]
+      .then((genres) => {
+        let genresArray = genres.data.genres;
+        Promise.all(
+          genresArray.map((data) => {
+            return db.models.Genres.findOneAndUpdate(
+              { genreID: data.id },
+              { genreID: data.id, name: data.name },
+              { upsert: true }
+            );
+          })
+        ).then((data) => {
+          res.status(200).json(data);
+        });
       })
       .catch((err) => {
-        console.log('err in getGenres: ', err);
+        console.log(err);
         res.sendStatus(404);
       });
   },

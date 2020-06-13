@@ -16,7 +16,7 @@ db.once('open', () => {
   console.log('Connected to db...');
 });
 
-// SET UP SCHEMA
+// SET UP SCHEMAS
 const moviesSchema = new mongoose.Schema({
   movieID: { type: Number, unique: true },
   name: String,
@@ -26,9 +26,16 @@ const moviesSchema = new mongoose.Schema({
 
 let Movies = mongoose.model('Movies', moviesSchema);
 
+const genreSchema = new mongoose.Schema({
+  genreID: { type: Number, unique: true },
+  name: String,
+});
+
+let Genres = mongoose.model('Genres', genreSchema);
+
 // SEED DATABASE WITH EXAMPLE DATA ONLY ONCE
 
-const seedDB = () => {
+const seedMovies = () => {
   let seed = new Movies({
     movieID: 343611,
     name: 'Jack Reacher: Never Go Back',
@@ -40,10 +47,24 @@ const seedDB = () => {
       console.log(err);
     }
     console.log(`${seed.name} saved to database!`);
-    alreadyExecuted = true;
   });
 };
 
-// seedDB();
+// seedMovies();
+
+const seedGenres = () => {
+  let seed = new Genres({
+    genreID: 28,
+    name: 'Action',
+  });
+  seed.save((err, seed) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log(`${seed.name} saved to database!`);
+  });
+};
+
+// seedGenres();
 
 module.exports.db = db;
