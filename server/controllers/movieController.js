@@ -5,12 +5,12 @@ const { db } = require('../../db/mongodb');
 //Return requests to the client
 module.exports = {
   getSearch: (req, res) => {
-    // let searchGenre = req.body.genre;
+    console.log('req in getSearch: ', req.query.genre);
     apiHelpers
-      .getMovies(12)
+      .getMovies(req.query.genre)
       .then((movies) => {
         let moviesArray = movies.data.results;
-        Promise.all(
+        return Promise.all(
           moviesArray.map((data) => {
             return db.models.Movies.findOneAndUpdate(
               { movieID: data.id },
@@ -25,9 +25,10 @@ module.exports = {
               { upsert: true }
             );
           })
-        ).then((data) => {
-          res.status(200).json(data);
-        });
+        );
+      })
+      .then((data) => {
+        res.status(200).json(data);
       })
       .catch((err) => {
         console.log(err);
@@ -39,7 +40,7 @@ module.exports = {
       .getOfficialGenres()
       .then((genres) => {
         let genresArray = genres.data.genres;
-        Promise.all(
+        return Promise.all(
           genresArray.map((data) => {
             return db.models.Genres.findOneAndUpdate(
               { genreID: data.id },
@@ -47,9 +48,9 @@ module.exports = {
               { upsert: true }
             );
           })
-        ).then((data) => {
-          res.status(200).json(data);
-        });
+        )})
+      .then((data) => {
+        res.status(200).json(data);
       })
       .catch((err) => {
         console.log(err);
@@ -59,5 +60,3 @@ module.exports = {
   saveMovie: (req, res) => {},
   deleteMovie: (req, res) => {},
 };
-
-module.exports.getSearch()
