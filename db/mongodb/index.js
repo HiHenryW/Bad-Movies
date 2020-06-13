@@ -18,7 +18,7 @@ db.once('open', () => {
 
 // SET UP SCHEMA
 const moviesSchema = new mongoose.Schema({
-  movieID: Number,
+  movieID: { type: Number, unique: true },
   name: String,
   genres: [Number],
   rating: Number,
@@ -27,12 +27,8 @@ const moviesSchema = new mongoose.Schema({
 let Movies = mongoose.model('Movies', moviesSchema);
 
 // SEED DATABASE WITH EXAMPLE DATA ONLY ONCE
-const seedDB = () => {
-  let alreadyExecuted = false;
-  if (alreadyExecuted) {
-    return;
-  }
 
+const seedDB = () => {
   let seed = new Movies({
     movieID: 343611,
     name: 'Jack Reacher: Never Go Back',
@@ -48,6 +44,6 @@ const seedDB = () => {
   });
 };
 
-seedDB();
+// seedDB();
 
 module.exports.db = db;

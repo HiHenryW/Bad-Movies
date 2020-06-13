@@ -30,9 +30,6 @@ Use the routes below to build your application:
 //OPTION 2: Use Express Router, where the routes are defined under /server/routes/movieRoutes.js file
 
 //***********************************************************************************************************************
-//OPTION 2: Use Express Router
-
-//IF you decide to go with this OPTION 2, delete OPTION 1 to continue
 
 //Routes
 const movieRoutes = require("./routes/movieRoutes.js");
