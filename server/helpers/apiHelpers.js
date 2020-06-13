@@ -8,6 +8,18 @@ module.exports = {
     let requestUrl = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`;
     return axios.get(requestUrl);
   },
-};
 
-// Don't forget to export your functions and require them within your server file
+  getMovies: (genreID) => {
+    let requestUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}`;
+    return axios.get(requestUrl, {
+      params: {
+        language: 'en-US',
+        sort_by: 'vote_average.asc',
+        include_adult: false,
+        include_video: false,
+        'vote_count.gte': 300,
+        with_genres: genreID,
+      },
+    });
+  },
+};

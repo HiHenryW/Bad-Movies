@@ -5,12 +5,32 @@ const { db } = require('../../db/mongodb');
 //Return requests to the client
 module.exports = {
   getSearch: (req, res) => {
-    // get the search genre
-    // https://www.themoviedb.org/account/signup
-    // get your API KEY
-    // use this endpoint to search for movies by genres, you will need an API key
-    // https://api.themoviedb.org/3/discover/movie
-    // and sort them by horrible votes using the search parameters in the API
+    let searchGenre = req.body.genre;
+    apiHelpers
+      .getMovies(searchGenre)
+      .then((movies) => {
+        let moviesArray = movies.data.results;
+        Promise.all(
+          moviesArray.map((data) => {
+            return db.models.Movies.findOneAndUpdate(
+              { movieID: data.id },
+              {
+                movieID: data.id,
+                name: data.title,
+                genres: data.genre_ids,
+                rating: data.vote_average,
+              },
+              { upsert: true }
+            );
+          })
+        ).then((data) => {
+          res.status(200).json(data);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.sendStatus(404);
+      });
   },
   getGenres: (req, res) => {
     apiHelpers
@@ -37,5 +57,3 @@ module.exports = {
   saveMovie: (req, res) => {},
   deleteMovie: (req, res) => {},
 };
-
-// module.exports.getGenres();
