@@ -5,9 +5,9 @@ const { db } = require('../../db/mongodb');
 //Return requests to the client
 module.exports = {
   getSearch: (req, res) => {
-    let searchGenre = req.body.genre;
+    // let searchGenre = req.body.genre;
     apiHelpers
-      .getMovies(searchGenre)
+      .getMovies(12)
       .then((movies) => {
         let moviesArray = movies.data.results;
         Promise.all(
@@ -19,6 +19,8 @@ module.exports = {
                 name: data.title,
                 genres: data.genre_ids,
                 rating: data.vote_average,
+                year: data.release_date.substring(0, 4),
+                image: data.poster_path,
               },
               { upsert: true }
             );
@@ -57,3 +59,5 @@ module.exports = {
   saveMovie: (req, res) => {},
   deleteMovie: (req, res) => {},
 };
+
+module.exports.getSearch()

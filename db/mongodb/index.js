@@ -22,6 +22,8 @@ const moviesSchema = new mongoose.Schema({
   name: String,
   genres: [Number],
   rating: Number,
+  year: String,
+  image: String,
 });
 
 let Movies = mongoose.model('Movies', moviesSchema);
