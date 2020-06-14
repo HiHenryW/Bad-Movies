@@ -16,6 +16,7 @@ class App extends React.Component {
     };
 
     this.getMovies = this.getMovies.bind(this);
+    this.saveMovie = this.saveMovie.bind(this);
   }
 
   getMovies(genreID) {
@@ -29,12 +30,31 @@ class App extends React.Component {
         this.setState({ movies: res.data });
       })
       .catch((err) => {
-        console.log('err in getMovies:', err);
-      })
+        console.log('err in getMovies: ', err);
+      });
   }
 
-  saveMovie() {
-    // same as above but do something diff
+  saveMovie(movie) {
+    // console.log('saveMovie movie object: ', movie);
+    axios
+      .post('http://localhost:3000/movies/save', {
+        movieID: movie.movieID,
+        name: movie.name,
+        genres: movie.genres,
+        rating: movie.rating,
+        year: movie.year,
+        image: movie.image,
+      })
+      .then((res) => {
+        let prevFavorites = this.state.favorites;
+        prevFavorites.push(res.movie);
+        this.setState({
+          favorites: prevFavorites,
+        });
+      })
+      .catch((err) => {
+        console.log('err in saveMovie: ', err);
+      });
   }
 
   deleteMovie() {
@@ -66,6 +86,7 @@ class App extends React.Component {
               this.state.showFaves ? this.state.favorites : this.state.movies
             }
             showFaves={this.state.showFaves}
+            saveMovie={this.saveMovie}
           />
         </div>
       </div>

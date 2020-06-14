@@ -35,6 +35,17 @@ const genreSchema = new mongoose.Schema({
 
 let Genres = mongoose.model('Genres', genreSchema);
 
+const favoriteSchema = new mongoose.Schema({
+  movieID: { type: Number, unique: true },
+  name: String,
+  genres: [Number],
+  rating: Number,
+  year: String,
+  image: String,
+});
+
+let FavoriteMovies = mongoose.model('FavoriteMovies', favoriteSchema);
+
 // SEED DATABASE WITH EXAMPLE DATA ONLY ONCE
 
 const seedMovies = () => {

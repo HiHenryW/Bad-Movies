@@ -1,4 +1,4 @@
-const movieModel = require('../models/movieModel.js');
+const {saveMovies} = require('../models/movieModel.js');
 const apiHelpers = require('../helpers/apiHelpers.js');
 const { db } = require('../../db/mongodb');
 
