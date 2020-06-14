@@ -1,4 +1,4 @@
-const {saveMovies} = require('../models/movieModel.js');
+const { saveMovies } = require('../models/movieModel.js');
 const apiHelpers = require('../helpers/apiHelpers.js');
 const { db } = require('../../db/mongodb');
 
@@ -58,6 +58,29 @@ module.exports = {
         res.sendStatus(404);
       });
   },
-  saveMovie: (req, res) => {},
+  saveMovie: (req, res) => {
+    // console.log('saveMovie in controller was accessed!')
+    // console.log('req object: ', req.body);
+    db.models.FavoriteMovies.findOneAndUpdate(
+      { movieID: req.body.movieID },
+      {
+        movieID: req.body.movieID,
+        name: req.body.name,
+        genres: req.body.genres,
+        rating: req.body.rating,
+        year: req.body.year,
+        image: req.body.image,
+      },
+      { upsert: true }
+    )
+      .exec()
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        console.log('err in saveMovie: ', err);
+        res.sendStatus(404);
+      });
+  },
   deleteMovie: (req, res) => {},
 };

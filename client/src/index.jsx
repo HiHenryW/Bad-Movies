@@ -35,22 +35,23 @@ class App extends React.Component {
   }
 
   saveMovie(movie) {
-    // console.log('saveMovie movie object: ', movie);
+    console.log('saveMovie movie object: ', movie);
     axios
-      .post('http://localhost:3000/movies/save', {
-        movieID: movie.movieID,
-        name: movie.name,
-        genres: movie.genres,
-        rating: movie.rating,
-        year: movie.year,
-        image: movie.image,
-      })
-      .then((res) => {
-        let prevFavorites = this.state.favorites;
-        prevFavorites.push(res.movie);
-        this.setState({
-          favorites: prevFavorites,
-        });
+    .post('http://localhost:3000/movies/save', {
+      movieID: movie.movieID,
+      name: movie.name,
+      genres: movie.genres,
+      rating: movie.rating,
+      year: movie.year,
+      image: movie.image,
+    })
+    .then((res) => {
+      let prevFavorites = this.state.favorites;
+      prevFavorites.push(res.movie);
+      this.setState({
+        favorites: prevFavorites,
+      });
+      console.log('saveMovie ran! favorites: ', this.state.favorites);
       })
       .catch((err) => {
         console.log('err in saveMovie: ', err);
