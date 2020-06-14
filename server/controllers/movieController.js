@@ -82,5 +82,15 @@ module.exports = {
         res.sendStatus(404);
       });
   },
-  deleteMovie: (req, res) => {},
+  deleteMovie: (req, res) => {
+    db.models.FavoriteMovies.findOneAndRemove({ movieID: req.body.movieID })
+      .exec()
+      .then((data) => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        console.log('err in deleteMovie: ', err);
+        res.sendStatus(404);
+      });
+  },
 };
