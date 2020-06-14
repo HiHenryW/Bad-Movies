@@ -61,7 +61,7 @@ const seedGenres = () => {
   });
   seed.save((err, seed) => {
     if (err) {
-      console.log(err);
+      console.log('err in seedGenres: ', err);
     }
     console.log(`${seed.name} saved to database!`);
   });

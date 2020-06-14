@@ -5,7 +5,7 @@ const { db } = require('../../db/mongodb');
 //Return requests to the client
 module.exports = {
   getSearch: (req, res) => {
-    console.log('req in getSearch: ', req.query.genre);
+    // console.log('req in getSearch: ', req.query.genre);
     apiHelpers
       .getMovies(req.query.genre)
       .then((movies) => {
@@ -23,7 +23,7 @@ module.exports = {
                 image: data.poster_path,
               },
               { upsert: true }
-            );
+            ).exec();
           })
         );
       })
@@ -31,7 +31,7 @@ module.exports = {
         res.status(200).json(data);
       })
       .catch((err) => {
-        console.log(err);
+        console.log('err in getSearch: ', err);
         res.sendStatus(404);
       });
   },
@@ -46,14 +46,15 @@ module.exports = {
               { genreID: data.id },
               { genreID: data.id, name: data.name },
               { upsert: true }
-            );
+            ).exec();
           })
-        )})
+        );
+      })
       .then((data) => {
         res.status(200).json(data);
       })
       .catch((err) => {
-        console.log(err);
+        console.log('err in getGenres: ', err);
         res.sendStatus(404);
       });
   },

@@ -14,21 +14,30 @@ class Search extends React.Component {
   }
 
   componentDidMount() {
+    this.reset();
     this.getGenres();
+  }
+
+  reset() {
+    this.setState({
+      genres: [],
+      selectedValue: null,
+    });
   }
 
   getGenres() {
     // console.log('getGenres was reached!');
-    axios.get('http://localhost:3000/movies/genres')
-    .then((res) => {
-      // console.log('genres get response data: ', res.data);
-      this.setState({
-        genres: res.data,
+    axios
+      .get('http://localhost:3000/movies/genres')
+      .then((res) => {
+        // console.log('genres get response data: ', res.data);
+        this.setState({
+          genres: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log('err in getGenres: ', err);
       });
-    })
-    .catch((err) => {
-      console.log('err in getGenres: ', err);
-    })
   }
 
   handleChange(event) {
