@@ -17,6 +17,11 @@ class App extends React.Component {
 
     this.getMovies = this.getMovies.bind(this);
     this.saveMovie = this.saveMovie.bind(this);
+    this.swapFavorites = this.swapFavorites.bind(this);
+  }
+
+  componentDidMount() {
+    this.getFavorites();
   }
 
   getMovies(genreID) {
@@ -34,24 +39,38 @@ class App extends React.Component {
       });
   }
 
-  saveMovie(movie) {
-    console.log('saveMovie movie object: ', movie);
+  getFavorites() {
     axios
-    .post('http://localhost:3000/movies/save', {
-      movieID: movie.movieID,
-      name: movie.name,
-      genres: movie.genres,
-      rating: movie.rating,
-      year: movie.year,
-      image: movie.image,
-    })
-    .then((res) => {
-      let prevFavorites = this.state.favorites;
-      prevFavorites.push(res.movie);
-      this.setState({
-        favorites: prevFavorites,
+      .get('http://localhost:3000/movies/favorites')
+      .then((res) => {
+        this.setState({
+          favorites: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log('err in getFavorites: ', err);
       });
-      console.log('saveMovie ran! favorites: ', this.state.favorites);
+  }
+
+  saveMovie(movie) {
+    // console.log('saveMovie movie object: ', movie);
+    axios
+      .post('http://localhost:3000/movies/save', {
+        movieID: movie.movieID,
+        name: movie.name,
+        genres: movie.genres,
+        rating: movie.rating,
+        year: movie.year,
+        image: movie.image,
+      })
+      .then((res) => {
+        // console.log('res object: ', res);
+        let currFavorites = this.state.favorites;
+        let newFavorites = currFavorites.concat(res.data);
+        this.setState({
+          favorites: newFavorites,
+        });
+        // console.log('saveMovie ran! favorites: ', this.state.favorites);
       })
       .catch((err) => {
         console.log('err in saveMovie: ', err);

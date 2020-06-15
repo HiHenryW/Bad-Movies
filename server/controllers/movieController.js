@@ -58,6 +58,17 @@ module.exports = {
         res.sendStatus(404);
       });
   },
+  getFavorites: (req, res) => {
+    db.models.FavoriteMovies.find({})
+      .exec()
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        console.log('err in getFavorites: ', err);
+        res.sendStatus(404);
+      });
+  },
   saveMovie: (req, res) => {
     // console.log('saveMovie in controller was accessed!')
     // console.log('req object: ', req.body);
@@ -86,7 +97,7 @@ module.exports = {
     db.models.FavoriteMovies.findOneAndRemove({ movieID: req.body.movieID })
       .exec()
       .then((data) => {
-        res.sendStatus(200);
+        res.send(200).json(data);
       })
       .catch((err) => {
         console.log('err in deleteMovie: ', err);
