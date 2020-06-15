@@ -18,6 +18,8 @@ class App extends React.Component {
     this.getMovies = this.getMovies.bind(this);
     this.saveMovie = this.saveMovie.bind(this);
     this.swapFavorites = this.swapFavorites.bind(this);
+    this.getFavorites = this.getFavorites.bind(this);
+    this.deleteMovie = this.deleteMovie.bind(this);
   }
 
   componentDidMount() {
@@ -77,8 +79,20 @@ class App extends React.Component {
       });
   }
 
-  deleteMovie() {
-    // same as above but do something diff
+  deleteMovie(movie) {
+    // console.log('deleteMovie entered! movieID: ', movie.movieID);
+    axios
+      .delete('http://localhost:3000/movies/delete', {
+        data: {
+          movieID: movie.movieID,
+        },
+      })
+      .then(() => {
+        this.getFavorites();
+      })
+      .catch((err) => {
+        console.log('err in deleteMovie: ', err);
+      });
   }
 
   swapFavorites() {
@@ -107,6 +121,7 @@ class App extends React.Component {
             }
             showFaves={this.state.showFaves}
             saveMovie={this.saveMovie}
+            deleteMovie={this.deleteMovie}
           />
         </div>
       </div>

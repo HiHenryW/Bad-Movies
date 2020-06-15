@@ -94,6 +94,7 @@ module.exports = {
       });
   },
   deleteMovie: (req, res) => {
+    console.log('deleteMovie in controller accessed!', req.body.movieID);
     db.models.FavoriteMovies.findOneAndRemove({ movieID: req.body.movieID })
       .exec()
       .then((data) => {

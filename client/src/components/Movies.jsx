@@ -14,7 +14,15 @@ class Movies extends React.Component {
         {this.props.movies.map((movie, i) => {
           // console.log(movie.image);
           return (
-            <li className="movie_item" key={i} onClick={() => {this.props.saveMovie(movie)}}>
+            <li
+              className="movie_item"
+              key={i}
+              onClick={() => {
+                this.props.showFaves
+                  ? this.props.deleteMovie(movie)
+                  : this.props.saveMovie(movie);
+              }}
+            >
               <img src={`https://image.tmdb.org/t/p/w500${movie.image}`} />
               <div className="movie_description">
                 <h2>{movie.name}</h2>
